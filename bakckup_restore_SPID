@@ -1,0 +1,19 @@
+select s.text as 'SQL'
+
+,r.session_id as 'SPID'
+
+,r.command as 'Command'
+
+,DB_NAME(r.database_id) as 'Database Name'
+
+,r.percent_complete as 'Percent Complete'
+
+,r.total_elapsed_time /1000 /60 as 'Elapsed Time mins'
+
+,r.estimated_completion_time /1000 /60 as 'Estimated completion time mins'
+
+from sys.dm_exec_requests r
+
+cross apply sys.dm_exec_sql_text (r.sql_handle) as s
+
+where r.percent_complete <> 0
